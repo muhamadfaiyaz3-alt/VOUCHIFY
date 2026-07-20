@@ -1,0 +1,119 @@
+services:
+  - type: web
+    name: vouchify-backend
+    env: node
+    plan: starter
+    rootDir: .
+    buildCommand: npm install && npm run build
+    startCommand: node dist/server.js
+    envVars:
+      - key: NODE_VERSION
+        value: 2AND ALOS FOCUS ON THIS ISSUES if ic can refresh teh page the the past listed vouchers and present listed vouchsred based on the validate it may expires and stsy there in that web even though after reload it wont happen to shows so make sure even though i can refresh the page the vouchers nedd to stay in our web app with the help of the database connectivity of mongodb it is already there in our code but due to some issues it wont work fix that 
+        
+        Thought for 14s
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        Analyzed
+        NotificationContext.jsx#L1-155
+        Analyzed
+        ListVoucher.jsx#L1-364
+        Analyzed
+        voucher.controller.ts#L1-172
+        
+        Thought for 31s
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        Edited
+        NotificationContext.jsx
+        +14
+        -0
+        Edited
+        Voucher.ts
+        +1
+        -1
+        Edited
+        voucher.service.ts
+        +1
+        -1
+        1 insertion (+)
+        1 deletion (-)
+        Error
+        Agent execution terminated due to error.
+        Continue
+        Error
+        Agent execution terminated due to error.
+        Continue
+        Error
+        Agent execution terminated due to error.
+        Continue
+        Error
+        Agent execution terminated due to error.
+        Continue
+        
+        Thought for 19s
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        Edited
+        voucher.service.ts
+        +2
+        -2
+        Analyzed
+        AuthContext.jsx#L1-107
+        Generating..
+        0
+      - key: PORT
+        value: "4000"
+      - key: MONGO_URI
+        sync: false
+      - key: FIREBASE_SERVICE_ACCOUNT
+        sync: false
+      - key: FRONTEND_URL
+        value: https://vouchify-frontend.onrender.com
+
+bvvvv 

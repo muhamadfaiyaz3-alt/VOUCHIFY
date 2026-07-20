@@ -1,0 +1,215 @@
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #0f172a;
+  /* Slate-950 default for dark theme consistency */
+  color: #f8fafc;
+}
+
+header {
+  background-color: #1e293b;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+main {
+  padding: 0;
+  /* Remove default padding as layouts handle it */
+}
+
+.image-container {
+  display: inline-block;
+  margin: 10px;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.image-container img {
+  width: 100%;
+  height: auto;
+}
+
+/* Footer - Relative Positioning to avoid overlap */
+footer {
+  background-color: #0f172a;
+  /* Slate-950 */
+  color: #94a3b8;
+  /* Slate-400 */
+  padding: 40px 20px;
+  text-align: center;
+  width: 100%;
+  border-top: 1px solid #1e293b;
+}
+
+/* Premium Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(30, 41, 59, 0.5);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #4f46e5;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #6366f1;
+}
+
+/* Global Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -20px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown 0.6s ease-out forwards;
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+
+  70% {
+    transform: scale(0.9);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-bounce-in {
+  animation: bounceIn 0.8s cubic-bezier(0.215, 0.610, 0.355, 1.000) forwards;
+}
+
+/* Marquee Animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-marquee {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee 20s linear infinite;
+}
+
+.hover-pause:hover .animate-marquee {
+  animation-play-state: paused;
+}
+
+/* Sky/Cloud Animation */
+@keyframes floatCloud {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100vw);
+  }
+}
+
+.cloud {
+  position: absolute;
+  top: 20%;
+  left: -200px;
+  width: 200px;
+  height: 60px;
+  background: #fff;
+  border-radius: 200px;
+  opacity: 0.1;
+  animation: floatCloud 25s linear infinite;
+  z-index: 0;
+}
+
+.cloud:after,
+.cloud:before {
+  content: '';
+  position: absolute;
+  background: inherit;
+  width: 100px;
+  height: 80px;
+  top: -15px;
+  left: 10px;
+  border-radius: 100px;
+  transform: rotate(30deg);
+}
+
+.cloud:after {
+  width: 120px;
+  height: 120px;
+  top: -55px;
+  left: auto;
+  right: 15px;
+}
+
+.cloud.c1 {
+  top: 10%;
+  opacity: 0.05;
+  animation-duration: 45s;
+  transform: scale(0.5);
+}
+
+.cloud.c2 {
+  top: 30%;
+  opacity: 0.08;
+  animation-duration: 35s;
+  transform: scale(0.8);
+}
+
+.cloud.c3 {
+  top: 60%;
+  opacity: 0.06;
+  animation-duration: 40s;
+  transform: scale(0.6);
+}
+
+/* Perspective for 3D Cards */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
