@@ -15,7 +15,14 @@ app.set("trust proxy", 1);
 
 app.use(
   cors({
-    origin: [Env.frontendUrl, "https://smart-voucher-exchange-platform.vercel.app", "http://localhost:5173", "http://localhost:5174"],
+    origin: [
+  Env.frontendUrl,
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "https://vouchify-self.vercel.app",
+  "https://vouchify-pnshv3x4f-get-vouchify.vercel.app",
+  "https://vouchify-git-main-get-vouchify.vercel.app"
+],
     credentials: true,
     optionsSuccessStatus: 200
   })
