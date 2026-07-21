@@ -5,14 +5,15 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyDbwQfQ638Bd_jT-6ebbvLfI5Cx5V0z-ic",
-    authDomain: "vouchify-ef6a8.firebaseapp.com",
-    projectId: "vouchify-ef6a8",
-    storageBucket: "vouchify-ef6a8.firebasestorage.app",
-    messagingSenderId: "155748606871",
-    appId: "1:155748606871:web:645a61d090c5c8534f9ad2",
-    measurementId: "G-1JZEPZ35X4"
+  apiKey: "AIzaSyA2Nu01qExulPUid6p4UiQ9Zis3Y5GcN0A",
+  authDomain: "vouchify-3.firebaseapp.com",
+  projectId: "vouchify-3",
+  storageBucket: "vouchify-3.firebasestorage.app",
+  messagingSenderId: "461311605376",
+  appId: "1:461311605376:web:4da1f2d12819077c09c465",
+  measurementId: "G-4C15SG3D75"
 };
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
