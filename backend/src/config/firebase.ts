@@ -56,6 +56,7 @@
 
 
 import admin from "firebase-admin";
+import type { DecodedIdToken } from "firebase-admin/auth";
 import Env from "./env";
 
 type ServiceAccount = admin.ServiceAccount;
@@ -108,7 +109,7 @@ export const initFirebase = () => {
   return firebaseApp;
 };
 
-export const verifyFirebaseToken = async (token: string) => {
+export const verifyFirebaseToken = async (token: string): Promise<DecodedIdToken> => {
   if (!token) throw new Error("Missing Firebase token");
 
   const app = initFirebase();
