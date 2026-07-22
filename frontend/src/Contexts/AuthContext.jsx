@@ -8,42 +8,75 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const syncGoogleUserWithBackend = async (firebaseUser) => {
+    const { data } = await client.post("/auth/google", {
+      email: firebaseUser.email,
+      displayName: firebaseUser.displayName,
+      photoURL: firebaseUser.photoURL,
+      googleUid: firebaseUser.uid,
+    });
+
+    localStorage.setItem("token", data.token);
+    setUser(data.user);
+    return data.user;
+  };
+
   useEffect(() => {
+    let unsubscribe = null;
+
     const initAuth = async () => {
       try {
-        // Handle Firebase Google redirect result after returning from Google
-        const { getRedirectResult } = await import("firebase/auth");
         const { auth } = await import("../firebase");
+        const { getRedirectResult, onAuthStateChanged } = await import(
+          "firebase/auth"
+        );
 
-        const result = await getRedirectResult(auth);
+        // 1. Try to catch Google redirect result
+        try {
+          const result = await getRedirectResult(auth);
 
-        if (result?.user) {
-          const firebaseUser = result.user;
-
-          const { data } = await client.post("/auth/google", {
-            email: firebaseUser.email,
-            displayName: firebaseUser.displayName,
-            photoURL: firebaseUser.photoURL,
-            googleUid: firebaseUser.uid,
-          });
-
-          localStorage.setItem("token", data.token);
-          setUser(data.user);
-          setLoading(false);
-          return;
+          if (result?.user) {
+            await syncGoogleUserWithBackend(result.user);
+            setLoading(false);
+            window.location.href = "/";
+            return;
+          }
+        } catch (redirectError) {
+          console.error("Google redirect result error:", redirectError);
         }
 
-        // Normal token-based login restore
+        // 2. Restore normal JWT login
         const token = localStorage.getItem("token");
 
         if (token) {
-          const { data } = await client.get("/me");
-          setUser(data.user);
+          try {
+            const { data } = await client.get("/me");
+            setUser(data.user);
+            setLoading(false);
+            return;
+          } catch (error) {
+            console.error("Failed to fetch user profile:", error);
+            localStorage.removeItem("token");
+          }
         }
+
+        // 3. Fallback: Firebase user exists but backend token missing
+        unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+          try {
+            if (firebaseUser && !localStorage.getItem("token")) {
+              await syncGoogleUserWithBackend(firebaseUser);
+              window.location.href = "/";
+              return;
+            }
+          } catch (error) {
+            console.error("Failed to sync Firebase user with backend:", error);
+          } finally {
+            setLoading(false);
+          }
+        });
       } catch (error) {
         console.error("Auth initialization error:", error);
         localStorage.removeItem("token");
-      } finally {
         setLoading(false);
       }
     };
@@ -60,6 +93,7 @@ export function AuthProvider({ children }) {
 
     return () => {
       window.removeEventListener("auth:unauthorized", handleUnauthorized);
+      if (unsubscribe) unsubscribe();
     };
   }, []);
 
@@ -84,7 +118,15 @@ export function AuthProvider({ children }) {
     await signInWithRedirect(auth, googleProvider);
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      const { signOut } = await import("firebase/auth");
+      const { auth } = await import("../firebase");
+      await signOut(auth);
+    } catch (error) {
+      console.error("Firebase logout error:", error);
+    }
+
     localStorage.removeItem("token");
     setUser(null);
     window.location.href = "/login";
