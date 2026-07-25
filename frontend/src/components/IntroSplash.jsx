@@ -1,67 +1,25 @@
 import { useEffect, useState } from "react";
 
-// Change this if you ever need to force the intro to play again for everyone
-// (e.g. after a rebrand). Bumping the key invalidates previously stored "seen" flags.
 const INTRO_STORAGE_KEY = "vouchify_intro_played";
 
-// --- Timing constants -------------------------------------------------
-// These drive both the JS timers and are mirrored into CSS custom properties
-// below, so the two can never drift out of sync. Tweak here only.
-const TOTAL_DURATION_MS = 3200; // full lifetime of the splash, including exit
-const EXIT_DURATION_MS = 600; // length of the fade/lift-out transition
-const EXIT_START_MS = TOTAL_DURATION_MS - EXIT_DURATION_MS; // when exit begins
-const REDUCED_MOTION_DURATION_MS = 450; // fast, near-instant path for reduced motion
-
-// Dev helper: call IntroSplash.reset() from the console to replay the intro
-// without clearing all of localStorage.
-const resetIntro = () => {
+const getInitialVisible = () => {
   try {
-    localStorage.removeItem(INTRO_STORAGE_KEY);
+    return localStorage.getItem(INTRO_STORAGE_KEY) !== "true";
   } catch {
-    // ignore storage errors
-  }
-};
-
-const prefersReducedMotion = () => {
-  try {
-    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  } catch {
-    return false;
+    return true;
   }
 };
 
 const IntroSplash = () => {
-  // `null` = "not yet determined" (safe default for SSR: server and the
-  // first client render both produce null/nothing, avoiding a hydration
-  // mismatch). The real localStorage check happens after mount, client-only.
-  const [visible, setVisible] = useState(null);
+  const [visible, setVisible] = useState(getInitialVisible);
   const [leaving, setLeaving] = useState(false);
 
-  // Decide, once mounted on the client, whether the intro should play.
-  useEffect(() => {
-    let shouldShow = true;
-    try {
-      shouldShow = localStorage.getItem(INTRO_STORAGE_KEY) !== "true";
-    } catch {
-      // localStorage unavailable (privacy mode, SSR edge cases, etc.) -
-      // fall back to showing the intro once for this session.
-    }
-    setVisible(shouldShow);
-  }, []);
-
-  // Drive the entrance -> hold -> exit -> unmount lifecycle.
   useEffect(() => {
     if (!visible) return;
 
-    const reduceMotion = prefersReducedMotion();
-    const exitStart = reduceMotion ? 0 : EXIT_START_MS;
-    const totalDuration = reduceMotion
-      ? REDUCED_MOTION_DURATION_MS
-      : TOTAL_DURATION_MS;
-
     const leaveTimer = window.setTimeout(() => {
       setLeaving(true);
-    }, exitStart);
+    }, 2600);
 
     const hideTimer = window.setTimeout(() => {
       try {
@@ -69,8 +27,9 @@ const IntroSplash = () => {
       } catch {
         // ignore storage errors
       }
+
       setVisible(false);
-    }, totalDuration);
+    }, 3200);
 
     return () => {
       window.clearTimeout(leaveTimer);
@@ -78,35 +37,10 @@ const IntroSplash = () => {
     };
   }, [visible]);
 
-  const dismiss = () => {
-    if (leaving) return; // already animating out, ignore repeat triggers
-    setLeaving(true);
-    try {
-      localStorage.setItem(INTRO_STORAGE_KEY, "true");
-    } catch {
-      // ignore storage errors
-    }
-    window.setTimeout(() => setVisible(false), EXIT_DURATION_MS);
-  };
-
-  const handleKeyDown = (event) => {
-    if (event.key === "Escape") dismiss();
-  };
-
   if (!visible) return null;
 
   return (
-    <div
-      className={`vouchify-intro ${leaving ? "vouchify-intro--leave" : ""}`}
-      style={{
-        "--vi-exit-duration": `${EXIT_DURATION_MS}ms`,
-      }}
-      // Purely decorative overlay: hide it from assistive tech entirely
-      // rather than trying to announce or focus-trap it.
-      aria-hidden="true"
-      onClick={dismiss}
-      onKeyDown={handleKeyDown}
-    >
+    <div className={`vouchify-intro ${leaving ? "vouchify-intro--leave" : ""}`}>
       <style>
         {`
           .vouchify-intro {
@@ -116,11 +50,10 @@ const IntroSplash = () => {
             display: grid;
             place-items: center;
             overflow: hidden;
-            cursor: pointer;
             background:
               radial-gradient(circle at 50% 38%, rgba(255,255,255,0.98) 0%, rgba(235,238,248,0.96) 42%, rgba(15,23,42,0.96) 100%);
             opacity: 1;
-            transition: opacity var(--vi-exit-duration) ease;
+            transition: opacity 600ms ease;
           }
 
           .vouchify-intro--leave {
@@ -150,7 +83,7 @@ const IntroSplash = () => {
           }
 
           .vouchify-intro--leave .vouchify-intro__content {
-            animation: introContentOut var(--vi-exit-duration) ease forwards;
+            animation: introContentOut 600ms ease forwards;
           }
 
           .vouchify-intro__image {
@@ -183,21 +116,6 @@ const IntroSplash = () => {
             text-transform: uppercase;
             opacity: 0.9;
             text-shadow: 0 8px 24px rgba(0,0,0,0.34);
-          }
-
-          .vouchify-intro__hint {
-            position: absolute;
-            bottom: clamp(1.25rem, 4vh, 2.5rem);
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 2;
-            font-size: 0.7rem;
-            font-weight: 700;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.55);
-            opacity: 0;
-            animation: introHintIn 600ms ease 1.6s forwards;
           }
 
           @keyframes introContentIn {
@@ -233,10 +151,6 @@ const IntroSplash = () => {
             }
           }
 
-          @keyframes introHintIn {
-            to { opacity: 1; }
-          }
-
           @media (max-width: 640px) {
             .vouchify-intro__image {
               width: min(94vw, 420px);
@@ -248,20 +162,11 @@ const IntroSplash = () => {
           }
 
           @media (prefers-reduced-motion: reduce) {
-            .vouchify-intro {
-              transition: opacity 200ms linear;
-            }
-
-            .vouchify-intro__content,
-            .vouchify-intro__hint {
-              animation: none !important;
-              opacity: 1 !important;
-              transform: none !important;
-              filter: none !important;
-            }
-
+            .vouchify-intro,
+            .vouchify-intro *,
             .vouchify-intro::before {
               animation: none !important;
+              transition: none !important;
             }
           }
         `}
@@ -271,7 +176,7 @@ const IntroSplash = () => {
         <img
           className="vouchify-intro__image"
           src="/gpay-anime.png"
-          alt=""
+          alt="Vouchify rewards preview"
         />
 
         <div className="vouchify-intro__brand">
@@ -279,12 +184,8 @@ const IntroSplash = () => {
           <span>Smart Voucher Exchange</span>
         </div>
       </div>
-
-      <div className="vouchify-intro__hint">Tap to skip</div>
     </div>
   );
 };
-
-IntroSplash.reset = resetIntro;
 
 export default IntroSplash;
