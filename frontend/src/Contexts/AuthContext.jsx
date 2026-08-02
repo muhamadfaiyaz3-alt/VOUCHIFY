@@ -112,11 +112,21 @@ export function AuthProvider({ children }) {
   };
 
   const loginWithGoogle = async () => {
-    const { signInWithRedirect } = await import("firebase/auth");
+  try {
+    const { signInWithPopup } = await import("firebase/auth");
     const { auth, googleProvider } = await import("../firebase");
 
-    await signInWithRedirect(auth, googleProvider);
-  };
+    const result = await signInWithPopup(auth, googleProvider);
+
+    console.log("Google user:", result.user);
+
+    await syncGoogleUserWithBackend(result.user);
+
+    window.location.href = "/";
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   const logout = async () => {
     try {
