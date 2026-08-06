@@ -9,7 +9,6 @@ import { CartProvider } from "./Contexts/CartContext";
 import ErrorBoundary from "./components/ErrorBoundary";
 import PublicLayout from "./components/PublicLayout";
 import AdminLayout from "./components/AdminLayout";
-import IntroSplash from "./components/IntroSplash";
 
 /* Public pages */
 import Home from "./Pages/Home";
@@ -57,7 +56,6 @@ import { ThemeProvider } from "./Contexts/ThemeContext";
 
 const App = () => (
   <ThemeProvider>
-    <IntroSplash />
     <AuthProvider>
       <PaymentConfigProvider>
         <VoucherProvider>
