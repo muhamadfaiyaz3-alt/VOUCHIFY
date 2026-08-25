@@ -234,36 +234,129 @@ const HeroSection = () => {
              side-by-side lane, so the layout switches to stacked: text on
              top, phone below, full-width, no more reserved right padding. */
           @media (max-width: 900px) {
-            .vouchify-hero-content {
-              align-items: center;
-              padding: 100px 24px 360px;
-              min-height: auto;
-            }
-            .vouchify-main-title { width: 100%; text-align: center; font-size: clamp(2.6rem, 12vw, 4.2rem); }
-            .vouchify-tagline { width: min(480px, 100%); text-align: center; margin-left: auto; margin-right: auto; }
-            .vouchify-cta-row { flex-wrap: wrap; justify-content: center; }
-            .vouchify-phone-stage {
-              width: min(460px, 88vw);
-              right: 50%;
-              bottom: -72px;
-              transform: translateX(50%);
-            }
-            @keyframes vouchifyPhoneFloat {
-              0%, 100% { transform: translateX(50%) translate3d(0, 0, 0); }
-              50% { transform: translateX(50%) translate3d(0, -20px, 0); }
-            }
-          }
+  .vouchify-hero-shell {
+    min-height: auto;
+    padding: 92px 20px 44px;
+  }
 
-          @media (max-width: 560px) {
-            .vouchify-hero-content { padding-bottom: 280px; }
-            .vouchify-phone-stage { width: min(380px, 88vw); bottom: -64px; }
-          }
+  .vouchify-hero-content {
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0;
+    padding-top: 20px;
+  }
 
-          @media (prefers-reduced-motion: reduce) {
-            .vouchify-phone-stage,
-            .vouchify-hero-light { animation: none; }
-          }
-        `}
+  .vouchify-main-title {
+    top: 30px;
+    font-size: clamp(3rem, 14vw, 5.5rem);
+  }
+
+  .vouchify-main-title .title-line-two {
+    transform: translateX(0);
+  }
+
+  /* CTA + description comes BEFORE the phone on mobile */
+  .vouchify-right-copy {
+    order: 1;
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    max-width: 560px;
+    text-align: center;
+    margin: 210px auto 0;
+  }
+
+  .vouchify-cta-row {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* Phone comes AFTER the CTA */
+  .vouchify-phone-stage {
+    order: 2;
+    width: min(430px, 82vw);
+    margin-top: 28px;
+  }
+
+  .vouchify-left-copy {
+    order: 3;
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    max-width: 560px;
+    text-align: center;
+    margin: 18px auto 0;
+  }
+
+  .vouchify-card-mini {
+    display: none;
+  }
+
+  .vouchify-card-value {
+    display: none;
+  }
+
+  .vouchify-card-saving {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .vouchify-hero-brand-mini {
+    display: none;
+  }
+
+  .vouchify-hero-content {
+    min-height: auto;
+    padding-bottom: 20px;
+  }
+
+  .vouchify-main-title {
+    font-size: clamp(3rem, 15vw, 4.8rem);
+    top: 24px;
+  }
+
+  .vouchify-right-copy {
+    margin-top: 190px;
+  }
+
+  .vouchify-right-copy p {
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .vouchify-cta-row {
+    gap: 10px;
+  }
+
+  .vouchify-primary-btn,
+  .vouchify-secondary-btn {
+    min-height: 48px;
+    padding: 0 18px;
+  }
+
+  .vouchify-phone-stage {
+    width: min(360px, 88vw);
+    margin-top: 24px;
+  }
+
+  .vouchify-left-copy {
+    display: none;
+  }
+
+  .vouchify-card-mini,
+  .vouchify-card-value,
+  .vouchify-card-saving {
+    display: none;
+  }
+}
       </style>
 
       <section className="vouchify-flash-hero">
