@@ -232,122 +232,126 @@ const HeroSection = () => {
 
           /* Below this width the phone no longer fits beside the text as a
              side-by-side lane, so the layout switches to stacked: text on
-             top, phone below, full-width, no more reserved right padding. */
+                       top, phone below, full-width, no more reserved right padding. */
           @media (max-width: 900px) {
   .vouchify-hero-shell {
     min-height: auto;
-    padding: 92px 20px 44px;
+    padding: 72px 20px 48px;
   }
 
   .vouchify-hero-content {
     min-height: auto;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
     align-items: center;
-    gap: 0;
-    padding-top: 20px;
+    justify-content: flex-start;
+    padding: 0;
+    box-sizing: border-box;
   }
 
   .vouchify-main-title {
-    top: 30px;
-    font-size: clamp(3rem, 14vw, 5.5rem);
-  }
-
-  .vouchify-main-title .title-line-two {
-    transform: translateX(0);
-  }
-
-  /* CTA + description comes BEFORE the phone on mobile */
-  .vouchify-right-copy {
-    order: 1;
     position: relative;
-    left: auto;
-    right: auto;
-    bottom: auto;
+    top: 0;
     width: 100%;
-    max-width: 560px;
+    max-width: 520px;
     text-align: center;
-    margin: 210px auto 0;
+    font-size: clamp(2.6rem, 12vw, 4.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.045em;
+  }
+
+  .vouchify-tagline {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    margin-top: 24px;
+    text-align: center;
+    font-size: 15px;
+    line-height: 1.6;
   }
 
   .vouchify-cta-row {
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  /* Phone comes AFTER the CTA */
-  .vouchify-phone-stage {
-    order: 2;
-    width: min(430px, 82vw);
-    margin-top: 28px;
-  }
-
-  .vouchify-left-copy {
-    order: 3;
     position: relative;
-    left: auto;
+    width: 100%;
+    margin-top: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  /*
+   * IMPORTANT:
+   * Desktop uses an absolutely positioned phone.
+   * On mobile we return it to normal document flow.
+   */
+  .vouchify-phone-stage {
+    position: relative;
     right: auto;
     bottom: auto;
-    width: 100%;
-    max-width: 560px;
-    text-align: center;
-    margin: 18px auto 0;
+    z-index: 2;
+    order: 4;
+    width: min(430px, 82vw);
+    margin: 36px auto 0;
+    animation: vouchifyPhoneFloat 4.5s ease-in-out infinite;
   }
 
-  .vouchify-card-mini {
-    display: none;
-  }
-
-  .vouchify-card-value {
-    display: none;
-  }
-
+  .vouchify-card-mini,
+  .vouchify-card-value,
   .vouchify-card-saving {
     display: none;
   }
 }
 
 @media (max-width: 560px) {
-  .vouchify-hero-brand-mini {
-    display: none;
+  .vouchify-hero-shell {
+    padding: 58px 16px 40px;
   }
 
   .vouchify-hero-content {
-    min-height: auto;
-    padding-bottom: 20px;
+    padding: 0;
   }
 
   .vouchify-main-title {
-    font-size: clamp(3rem, 15vw, 4.8rem);
-    top: 24px;
+    top: 0;
+    max-width: 100%;
+    font-size: clamp(2.35rem, 13vw, 3.8rem);
+    line-height: 0.96;
+    letter-spacing: -0.04em;
   }
 
-  .vouchify-right-copy {
-    margin-top: 190px;
-  }
-
-  .vouchify-right-copy p {
+  .vouchify-tagline {
+    max-width: 340px;
+    margin-top: 22px;
     font-size: 14px;
-    line-height: 1.65;
+    line-height: 1.6;
   }
 
   .vouchify-cta-row {
+    margin-top: 24px;
     gap: 10px;
   }
 
   .vouchify-primary-btn,
   .vouchify-secondary-btn {
-    min-height: 48px;
-    padding: 0 18px;
+    min-height: 46px;
+    padding: 0 17px;
+    font-size: 12px;
   }
 
   .vouchify-phone-stage {
-    width: min(360px, 88vw);
-    margin-top: 24px;
+    width: min(350px, 88vw);
+    margin-top: 32px;
   }
 
-  .vouchify-left-copy {
+  .vouchify-hero-brand-mini {
+    display: none;
+  }
+
+  .vouchify-left-copy,
+  .vouchify-right-copy {
     display: none;
   }
 
