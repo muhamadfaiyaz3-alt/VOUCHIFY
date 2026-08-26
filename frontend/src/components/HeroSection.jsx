@@ -357,6 +357,7 @@ const HeroSection = () => {
     display: none;
   }
 }
+        `}
       </style>
 
       <section className="vouchify-flash-hero">
